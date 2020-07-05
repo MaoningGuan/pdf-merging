@@ -16,4 +16,8 @@ pip install -r requirements.txt
 ```python
 python example1.py
 ```
+**运行结果：**
+
+![image_1](https://github.com/MaoningGuan/pdf-merging/blob/master/test2/example1.png)  
+
 实现过程请查看代码中的注释。
