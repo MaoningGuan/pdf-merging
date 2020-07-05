@@ -4,7 +4,6 @@ import fitz
 import logging
 import os
 import pandas as pd
-import PyPDF2
 
 
 class PdfMerge:
@@ -96,8 +95,8 @@ class PdfMerge:
 
 
 if __name__ == '__main__':
-    dirPath = r"E:\Python\code\universalCode\test1"  # 扫描件的路径
-    save_path = r'E:\Python\code\universalCode\test2'  # 合并后保存的路径
+    dirPath = r"E:\IoT\MaoningGuan\学位论文\test1"  # 扫描件的路径
+    save_path = r'E:\IoT\MaoningGuan\学位论文\test2'  # 合并后保存的路径
     file_path = r'./student_number.csv'  # 保存pdf文件名的CSV文件的路径
 
     pdfMerge = PdfMerge()
