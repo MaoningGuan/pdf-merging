@@ -77,7 +77,7 @@ class PdfMerge:
                               f'to that({pdfDoc2.pageCount}) of {file2_name}.')
             return None
 
-        for pageIndex in zip(range(pdfDoc1.pageCount), range(pdfDoc2.pageCount - 1, -1, -1)):
+        for pageIndex in zip(range(pdfDoc1.pageCount), range(pdfDoc2.pageCount - 1, -1, -1)):   # file2_name的页面顺序是相反的
             page1 = pageIndex[0]
             page2 = pageIndex[1]
             doc.insertPDF(pdfDoc1, from_page=page1, to_page=page1)  # 将当前页插入文档
