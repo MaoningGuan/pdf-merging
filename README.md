@@ -12,7 +12,7 @@
 ```python
 pip install -r requirements.txt
 ```
-> 注意事项：
+> 注意事项：  
 Windows用户若是在安装fitz的过程中，提示以下错误：  
 **building 'traits.ctraits' extension  
 error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ Build Tools"**  
@@ -20,11 +20,7 @@ error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ 
 [Traits: optional type-checking, data dependencies, and event notifications.
 Part of the Enthought Tool Suite.](https://www.lfd.uci.edu/~gohlke/pythonlibs/#traits)  
 下载与Python版本对应的.whl文件来进行安装，如对应于windows 64bit和python3.7的.whl文件：traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl  
-然后使用：
-```python
-pip install traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl  
-```
-来进行安装。  
+然后使用：pip install traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl 来进行安装。  
 **使用例子：**
 ```python
 python example1.py
