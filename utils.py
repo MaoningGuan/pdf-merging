@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import fitz
 import logging
 import os
 import pandas as pd
@@ -49,9 +50,9 @@ class PdfMerge:
             all_files_name.append(file_name)
         return all_files_name
 
-    def merge_pdf_file(self, file_dir_path, file_name, save_dir_path='', file_format='.pdf', encoding='gbk'):
+    def merge_pdf_file(self, file_dir_path, file_name, save_dir_path='', file_format='.pdf'):
         """
-        根据项目需求，合并两个PDF文件
+        根据项目需求，合并两个扫描的PDF文件（合并可编辑的PDF也适用）
         :param file_dir_path: 两个PDF文件的文件夹路径
         :param file_name: PDF文件名的前缀
         :param save_dir_path: 合并后PDF的保存路径
@@ -60,54 +61,43 @@ class PdfMerge:
         """
         if not save_dir_path:
             save_dir_path = file_dir_path
+
+        if not os.path.exists(save_dir_path):  # 判断存放文件夹是否存在
+            os.makedirs(save_dir_path)  # 若文件夹不存在就创建
+
+        doc = fitz.open()
+
         file1_name = file_name + '-1' + file_format  # PDF1的文件名
         file2_name = file_name + '-2' + file_format  # PDF2的文件名
         file1_absolute_path = os.path.join(file_dir_path, file1_name)  # PDF1的绝对路径
         file2_absolute_path = os.path.join(file_dir_path, file2_name)  # PDF2的绝对路径
-
-        pdfWriter = PyPDF2.PdfFileWriter()
-        # with open(file1_absolute_path, 'rb') as pdfFileObj1, open(file2_absolute_path, 'rb') as pdfFileObj2:
-        pdfFileObj1 = open(file1_absolute_path, 'rb')
-        pdfFileObj2 = open(file2_absolute_path, 'rb')
-
-        pdfReader1 = PyPDF2.PdfFileReader(pdfFileObj1)
-        pdfReader2 = PyPDF2.PdfFileReader(pdfFileObj2)
-
-        # 如果pdf文件已经加密，必须首先解密才能使用pyPdf
-        if pdfReader1.isEncrypted == True:
-            pdfReader1.decrypt("map")
-        if pdfReader2.isEncrypted == True:
-            pdfReader2.decrypt("map")
-
-        if pdfReader1.numPages != pdfReader2.numPages:
-            self.logger.error(f'The numPages({pdfReader1.numPages}) of {file1_name} is not equal '
-                              f'to that({pdfReader2.numPages}) of {file2_name}.')
+        pdfDoc1 = fitz.open(file1_absolute_path)
+        pdfDoc2 = fitz.open(file2_absolute_path)
+        if pdfDoc1.pageCount != pdfDoc2.pageCount:
+            self.logger.error(f'The numPages({pdfDoc1.pageCount}) of {file1_name} is not equal '
+                              f'to that({pdfDoc2.pageCount}) of {file2_name}.')
             return None
-        # 合并pdf
-        for pageIndex in zip(range(pdfReader1.numPages), range(pdfReader2.numPages-1, -1, -1)):
-            page1 = pdfReader1.getPage(pageIndex[0])
-            page2 = pdfReader2.getPage(pageIndex[1])
-            pdfWriter.addPage(page1)
-            pdfWriter.addPage(page2)
 
+        for pageIndex in zip(range(pdfDoc1.pageCount), range(pdfDoc2.pageCount - 1, -1, -1)):
+            page1 = pageIndex[0]
+            page2 = pageIndex[1]
+            doc.insertPDF(pdfDoc1, from_page=page1, to_page=page1)  # 将当前页插入文档
+            doc.insertPDF(pdfDoc2, from_page=page2, to_page=page2)  # 将当前页插入文档
 
         # 保存合并后的pdf
         pdfOutput_name = file_name + file_format  # PDF的文件名
         pdfOutput_absolute_path = os.path.join(save_dir_path, pdfOutput_name)  # PDF的绝对路径
-        print(pdfOutput_absolute_path)
-        pdfOutput = open(pdfOutput_absolute_path, "wb")
-        pdfWriter.write(pdfOutput)
-        pdfOutput.close()
-        pdfFileObj1.close()
-        pdfFileObj2.close()
-            # with open(pdfOutput_absolute_path, 'wb') as pdfOutput:
-            #     pdfWriter.write(pdfOutput)
-            #     print(pdfOutput_absolute_path)
+        if os.path.exists(pdfOutput_absolute_path):
+            os.remove(pdfOutput_absolute_path)
+        doc.save(pdfOutput_absolute_path)
+        doc.close()
+        pdfDoc1.close()
+        pdfDoc2.close()
 
 
 if __name__ == '__main__':
-    dirPath = r"E:\IoT\MaoningGuan\学位论文\test1"  # 扫描件的路径
-    save_path = r'E:\IoT\MaoningGuan\学位论文\test2'  # 合并后保存的路径
+    dirPath = r"E:\Python\code\universalCode\test1"  # 扫描件的路径
+    save_path = r'E:\Python\code\universalCode\test2'  # 合并后保存的路径
     file_path = r'./student_number.csv'  # 保存pdf文件名的CSV文件的路径
 
     pdfMerge = PdfMerge()
@@ -115,6 +105,4 @@ if __name__ == '__main__':
     files_name = pdfMerge.get_file_name(file_path)  # 获取文件名
     for file_name in files_name:
         pdfMerge.merge_pdf_file(dirPath, file_name, save_path)  # 合并PDF文件
-    # print(csv_data.shape)
-    # for line in csv_data[list(range(3, 6))]:
-    #     print(line)
+
