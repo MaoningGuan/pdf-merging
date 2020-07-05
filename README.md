@@ -8,7 +8,7 @@
 因为我们是直接把纸质版文件翻过来扫描，所以页面顺序相反了（如果你是实操过的，应该可以理解）。
 
 ## 二、实现方法：
-**安装依赖：**
+**（1）安装依赖：**
 ```python
 pip install -r requirements.txt
 ```
@@ -19,13 +19,14 @@ error: Microsoft Visual C++ 14.0 is required. Get it with "Microsoft Visual C++ 
 可以到:  
 [Traits: optional type-checking, data dependencies, and event notifications.
 Part of the Enthought Tool Suite.](https://www.lfd.uci.edu/~gohlke/pythonlibs/#traits)  
-下载与Python版本对应的.whl文件来进行安装，如对应于windows 64bit和python3.7的.whl文件：traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl  
-然后使用：pip install traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl 来进行安装。  
-**使用例子：**
+下载与Python版本对应的.whl文件来安装traits，如对应于windows 64bit和python3.7的.whl文件：traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl  
+然后使用**pip install traits‑6.1.0‑cp37‑cp37m‑win_amd64.whl**来进行安装。
+
+**（2）使用例子：**
 ```python
 python example1.py
 ```
-**运行结果：**
+**（3）运行结果：**
 
 ![image_1](https://github.com/MaoningGuan/pdf-merging/blob/master/test2/example1.png)  
 
