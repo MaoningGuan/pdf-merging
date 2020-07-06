@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# private files
+研究生名单2018.xls
+
 # C extensions
 *.so
 
