@@ -93,6 +93,13 @@ class PdfMerge:
         pdfDoc1.close()
         pdfDoc2.close()
 
+    def rename_file(self, file_name):
+        """
+        重命名PDF文件
+        :param file_name:
+        :return:
+        """
+
 
 if __name__ == '__main__':
     dirPath = r"E:\IoT\MaoningGuan\学位论文\test1"  # 扫描件的路径

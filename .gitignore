@@ -5,6 +5,7 @@ __pycache__/
 
 # private files
 研究生名单2018.xls
+student_number.csv
 
 # C extensions
 *.so
