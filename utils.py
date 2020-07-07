@@ -16,11 +16,12 @@ class PdfMerge:
         self.logger.addHandler(sh)
         self.logger.setLevel(logging.DEBUG)
 
-    def save_file_name(self, dir_path, encoding='gbk'):
+    def save_file_name(self, dir_path, save_file_path, encoding='gbk'):
         """
         获取文件夹dir下PDF文件的名称，并保存到CSV文件中
         :param dir_path: 文件夹路径
         :param encoding: 文件编码
+        :param save_file_path: 保存文件名的文件路径
         :return:
         """
         index = ['学号']
@@ -32,7 +33,7 @@ class PdfMerge:
                 if file_name not in student_number:  # 存在1800271038-1.pdf，1800271038-2.pdf的情况
                     student_number.append(file_name)
         csv_file = pd.DataFrame(columns=index, data=student_number)  # 把list保存成CSV文件
-        csv_file.to_csv('./student_number.csv', encoding=encoding)
+        csv_file.to_csv(save_file_path, encoding=encoding)
 
     def get_file_name(self, file_dir_path, encoding='gbk'):
         """
@@ -93,21 +94,27 @@ class PdfMerge:
         pdfDoc1.close()
         pdfDoc2.close()
 
-    def rename_file(self, file_name):
+    def rename_file(self, oldname, newname):
         """
         重命名PDF文件
-        :param file_name:
+        :param oldname: 旧文件名的文件路径
+        :param newname: 新文件名的文件路径
         :return:
         """
+        try:
+            os.rename(oldname, newname)
+        except:
+            self.logger.error(f'Failed to rename {oldname} to {newname}.')
 
 
 if __name__ == '__main__':
     dirPath = r"E:\IoT\MaoningGuan\学位论文\test1"  # 扫描件的路径
     save_path = r'E:\IoT\MaoningGuan\学位论文\test2'  # 合并后保存的路径
-    file_path = r'./student_number.csv'  # 保存pdf文件名的CSV文件的路径
+    save_file_name = 'student_number.csv'
+    file_path = r'./' + save_file_name  # 保存pdf文件名的CSV文件的路径
 
     pdfMerge = PdfMerge()
-    pdfMerge.save_file_name(dirPath)
+    pdfMerge.save_file_name(dirPath, file_path)
     files_name = pdfMerge.get_file_name(file_path)  # 获取文件名
     for file_name in files_name:
         pdfMerge.merge_pdf_file(dirPath, file_name, save_path)  # 合并PDF文件
