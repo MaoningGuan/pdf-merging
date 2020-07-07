@@ -5,6 +5,8 @@
 """
 import logging
 import os
+import pandas as pd
+import shutil
 import xlrd
 
 from utils import PdfMerge
@@ -21,11 +23,11 @@ logger.setLevel(logging.DEBUG)
 
 def rename_merged_pdf():
     save_path = r'E:\IoT\MaoningGuan\学位论文\2018级开题报告扫描合成版'  # 合并后保存的路径
-    new_save_path = r'E:\IoT\MaoningGuan\学位论文\2018级开题报告扫描合成版（重命名）'  # 重命名后保存的路径
-    file_path = r'研究生名单2018.xls'
+    new_save_path = r'E:\IoT\MaoningGuan\学位论文\2018级开题报告扫描合成版（重命名）'  # 保存重命名后的文件路径
+    file_path = r'./研究生名单2018.xls'
+    student_name_pdf = r'./student_name_pdf.csv'
     file_format = '.pdf'
 
-    # 创建重命名后保存的文件夹
     if not os.path.exists(new_save_path):
         os.mkdir(new_save_path)
 
@@ -49,17 +51,30 @@ def rename_merged_pdf():
     # print(new_name_dict)
 
     # 重命名PDF文件
+    # for old_file_name in old_files_name:
+    #     old_name = old_file_name.strip(file_format)
+    #     student_name = new_name_dict.get(old_name)
+    #     if student_name:
+    #         new_file_name = old_name + '-' + student_name + file_format  # 拼接新的文件名
+    #         # 重命名PDF文件
+    #         print(f'重命名：{old_file_name} ——> {new_file_name}')
+    #         shutil.copyfile(os.path.join(save_path, old_file_name), os.path.join(new_save_path, new_file_name))
+    #     else:
+    #         logger.warning(f'The student number {old_name} is not exist.')
+
+    # 保存已合成的PDF的最新名单
+    student_name_list = []
     for old_file_name in old_files_name:
         old_name = old_file_name.strip(file_format)
         student_name = new_name_dict.get(old_name)
         if student_name:
-            new_file_name = old_name + '-' + student_name + file_format  # 拼接新的文件名
-            # 重命名PDF文件
-            print(f'重命名：{old_file_name} ——> {new_file_name}')
-            os.rename(os.path.join(save_path, old_file_name), os.path.join(new_save_path, new_file_name))
+            student_name_list.append([old_name, student_name])
         else:
             logger.warning(f'The student number {old_name} is not exist.')
-
+    print(student_name_list)
+    index = ['学号', '姓名']
+    csv_file = pd.DataFrame(columns=index, data=student_name_list)  # 把list保存成CSV文件
+    csv_file.to_csv(student_name_pdf, encoding='gbk')
 
 if __name__ == '__main__':
     rename_merged_pdf()

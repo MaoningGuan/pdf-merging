@@ -4,8 +4,8 @@ __pycache__/
 *$py.class
 
 # private files
-研究生名单2018.xls
-student_number.csv
+*.xls
+*.csv
 
 # C extensions
 *.so
